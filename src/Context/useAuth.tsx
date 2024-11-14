@@ -13,6 +13,8 @@ type UserContextType = {
   loginUser: (username: string, password: string) => void;
   logout: () => void;
   isLoggedIn: () => boolean;
+  sideMenuIsExpand: boolean;
+  setSideMenuIsExpand: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type Props = { children: React.ReactNode };
@@ -24,6 +26,7 @@ export const UserProvider = ({ children }: Props) => {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const [sideMenuIsExpand, setSideMenuIsExpand] = useState(true);
 
   useEffect(() => {
     const user = localStorage.getItem("user");
@@ -106,7 +109,7 @@ export const UserProvider = ({ children }: Props) => {
 
   return (
     <UserContext.Provider
-      value={{ loginUser, user, token, logout, isLoggedIn, registerUser }}
+      value={{ loginUser, user, token, logout, isLoggedIn, registerUser, sideMenuIsExpand, setSideMenuIsExpand, }}
     >
       {isReady ? children : null}
     </UserContext.Provider>
