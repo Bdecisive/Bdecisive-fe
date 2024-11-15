@@ -27,15 +27,37 @@ export const userProfile = async () => {
 };
 
 export const registerAPI = async (
+  firstName: string,
+  lastName: string,
   email: string,
   username: string,
-  password: string
+  password: string,
+  role: string
 ) => {
   try {
-    const data = await axios.post<UserProfileToken>(BASE_URL + "account/register", {
+    // Dynamically set the API endpoint based on the role
+    let endpoint = "";
+    switch (role) {
+      case "ROLE_VENDOR":
+        endpoint = "vendors/create";
+        break;
+      case "ROLE_INFLUENCER":
+        endpoint = "influencers/create";
+        break;
+      case "ROLE_FOLLOWER":
+        endpoint = "followers/create";
+        break;
+      default:
+        throw new Error("Invalid role");
+    }
+
+    const data = await axios.post<UserProfileToken>(BASE_URL + endpoint, {
+      firstName: firstName,
+      lastName: lastName,
       email: email,
       username: username,
       password: password,
+      role: password
     });
     return data;
   } catch (error) {

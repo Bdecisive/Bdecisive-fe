@@ -9,7 +9,7 @@ import axios from "axios";
 type UserContextType = {
   user: UserProfile | null;
   token: string | null;
-  registerUser: (email: string, username: string, password: string) => void;
+  registerUser: (firstName: string, lastName: string, email: string, username: string, password: string, role: string) => void;
   loginUser: (username: string, password: string) => void;
   logout: () => void;
   isLoggedIn: () => boolean;
@@ -40,24 +40,18 @@ export const UserProvider = ({ children }: Props) => {
   }, []);
 
   const registerUser = async (
+    firstName: string,
+    lastName: string,
     email: string,
     username: string,
-    password: string
+    password: string,
+    role: string
   ) => {
-    await registerAPI(email, username, password)
+    await registerAPI(firstName, lastName, email, username, password, role)
       .then((res) => {
         if (res) {
-          // localStorage.setItem("token", res?.data.token);
-          // const userObj = {
-          //   userName: res?.data.userName,
-          //   email: res?.data.email,
-          //   role: res?.data.role,
-          // };
-          // localStorage.setItem("user", JSON.stringify(userObj));
-          // setToken(res?.data.token!);
-          // setUser(userObj!);
-          // toast.success("Login Success!");
-          // navigate("/search");
+          toast.success("Login Success!");
+          navigate("/login");
         }
       })
       .catch((e) => toast.warning("Server error occured"));
