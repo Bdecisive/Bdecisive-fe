@@ -67,28 +67,29 @@ export const UserProvider = ({ children }: Props) => {
     await loginAPI(username, password)
       .then((res) => {
         if (res) {
-          localStorage.setItem("token", res?.data.token);
-          setToken(res?.data.token!);
-          
-          userProfile().then((profileRes) => {
-            // Ensure default values are set for userName, email, and role
-            const userObj: UserProfile = {
-              userName: profileRes?.data.userName || "",  // Default to empty string if undefined
-              email: profileRes?.data.email || "",        // Default to empty string if undefined
-              role: profileRes?.data.role || "",          // Default to empty string if undefined
-            };
-            
-            localStorage.setItem("user", JSON.stringify(userObj));
-            setUser(userObj);
-            toast.success("Login Success!");
-  
-            // Use correct role names in navigation
-            if (userObj.role === "ROLE_ADMIN") {
-              navigate("/admin");
-            } else if (userObj.role === "ROLE_VENDOR") {
-              navigate("/vendor");
-            }
-          });
+          const token = res.data.token;
+          localStorage.setItem("token", token);
+          setToken(token);
+
+          // Decode the JWT token to extract user information
+          const base64Payload = token.split(".")[1];
+          const decodedPayload = JSON.parse(atob(base64Payload));
+          console.log(decodedPayload);
+
+          // Map the decoded payload to user profile properties
+          const userObj: UserProfile = {
+            name: decodedPayload.name || "",
+            email: decodedPayload.email || "",
+            role: decodedPayload.roles || "",
+          };
+
+          // Save user info in local storage and set user state
+          localStorage.setItem("user", JSON.stringify(userObj));
+          setUser(userObj);
+
+          toast.success("Login Success!");
+
+          navigate("/dashboard");
         }
       })
       .catch(() => toast.warning("Server error occurred"));

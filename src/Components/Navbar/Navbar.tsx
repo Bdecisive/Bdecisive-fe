@@ -7,7 +7,10 @@ import { useAuth } from "../../Context/useAuth";
 interface Props {}
 
 const Navbar = (props: Props) => {
-  const { isLoggedIn, user, logout, sideMenuIsExpand } = useAuth();
+  const location = useLocation();
+  const isDashboard = location.pathname.startsWith('/dashboard');
+
+  const { isLoggedIn, logout, sideMenuIsExpand } = useAuth();
 
   console.log(sideMenuIsExpand)
   return (
@@ -23,14 +26,20 @@ const Navbar = (props: Props) => {
               <img className="logo" src={logo} alt="" />
             </Link>
             <div className="hidden font-bold lg:flex">
-              <Link to="/search" className="text-black hover:text-darkBlue">
-                Search
+              <Link to="/" className="text-black hover:text-darkBlue">
+                Home
               </Link>
+            </div>
+            <div className="hidden font-bold lg:flex">
+            {isLoggedIn() && !isDashboard && (
+                <Link to="/dashboard" className="text-black hover:text-darkBlue">
+                  Dashboard
+                </Link>
+              )}
             </div>
           </div>
           {isLoggedIn() ? (
             <div className="hidden lg:flex items-center space-x-6 text-back">
-              <div className="hover:text-darkBlue">Welcome, {user?.userName}</div>
               <a
                 onClick={logout}
                 className="px-8 py-3 font-bold rounded text-white bg-lightGreen hover:opacity-70"
