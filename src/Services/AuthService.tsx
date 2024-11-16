@@ -1,16 +1,18 @@
 import axios from "axios";
 import { handleError } from "../Helpers/ErrorHandler";
 import { UserProfile, UserProfileToken } from "../Models/User";
+import { API_URL } from "../Config";
+import { ENDPOINTS } from "../Config/endpoints";
 
-const BASE_URL = "http://localhost:8080/api/";
+export interface LoginData {
+  username: string;
+  password: string;
+}
 
-export const loginAPI = async (username: string, password: string) => {
+export const loginAPI = async (data: LoginData) => {
   try {
-    const data = await axios.post<UserProfileToken>(BASE_URL + "auth/login", {
-      username: username,
-      password: password,
-    });
-    return data;
+    const response = await axios.post<UserProfileToken>(`${API_URL}${ENDPOINTS.AUTH.LOGIN}`, data)
+    return response;
   } catch (error) {
     handleError(error);
   }
@@ -18,47 +20,8 @@ export const loginAPI = async (username: string, password: string) => {
 
 export const userProfile = async () => {
   try {
-    const data = await axios.get<UserProfile>(BASE_URL + "users/profile");
+    const data = await axios.get<UserProfile>(API_URL + "users/profile");
     console.log(JSON.stringify(data));
-    return data;
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const registerAPI = async (
-  firstName: string,
-  lastName: string,
-  email: string,
-  username: string,
-  password: string,
-  role: string
-) => {
-  try {
-    // Dynamically set the API endpoint based on the role
-    let endpoint = "";
-    switch (role) {
-      case "ROLE_VENDOR":
-        endpoint = "vendors/create";
-        break;
-      case "ROLE_INFLUENCER":
-        endpoint = "influencers/create";
-        break;
-      case "ROLE_FOLLOWER":
-        endpoint = "followers/create";
-        break;
-      default:
-        throw new Error("Invalid role");
-    }
-
-    const data = await axios.post<UserProfileToken>(BASE_URL + endpoint, {
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      username: username,
-      password: password,
-      role: password
-    });
     return data;
   } catch (error) {
     handleError(error);

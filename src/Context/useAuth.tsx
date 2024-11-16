@@ -1,16 +1,17 @@
 import { createContext, useEffect, useState } from "react";
 import { UserProfile } from "../Models/User";
 import { useNavigate } from "react-router-dom";
-import { loginAPI, registerAPI, userProfile } from "../Services/AuthService";
+import { loginAPI, LoginData } from "../Services/AuthService";
 import { toast } from "react-toastify";
 import React from "react";
 import axios from "axios";
+import { useSpinnerAction } from "../Utils/useSpinnerAction";
+import { useSpinner } from "./SpinnerContext";
 
 type UserContextType = {
   user: UserProfile | null;
   token: string | null;
-  registerUser: (firstName: string, lastName: string, email: string, username: string, password: string, role: string) => void;
-  loginUser: (username: string, password: string) => void;
+  loginUser: (data: LoginData) => void;
   logout: () => void;
   isLoggedIn: () => boolean;
   sideMenuIsExpand: boolean;
@@ -27,6 +28,8 @@ export const UserProvider = ({ children }: Props) => {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [sideMenuIsExpand, setSideMenuIsExpand] = useState(true);
+  const withSpinner = useSpinnerAction();
+
 
   useEffect(() => {
     const user = localStorage.getItem("user");
@@ -39,54 +42,37 @@ export const UserProvider = ({ children }: Props) => {
     setIsReady(true);
   }, []);
 
-  const registerUser = async (
-    firstName: string,
-    lastName: string,
-    email: string,
-    username: string,
-    password: string,
-    role: string
-  ) => {
-    await registerAPI(firstName, lastName, email, username, password, role)
-      .then((res) => {
-        if (res) {
-          toast.success("Login Success!");
-          navigate("/login");
-        }
-      })
-      .catch((e) => toast.warning("Server error occured"));
-  };
+  const loginUser = async (data: LoginData) => {
+    await withSpinner(async () => {
+      await loginAPI(data)
+        .then((res) => {
+          if (res) {
+            const token = res.data.token;
+            localStorage.setItem("token", token);
+            setToken(token);
 
-  const loginUser = async (username: string, password: string) => {
-    await loginAPI(username, password)
-      .then((res) => {
-        if (res) {
-          const token = res.data.token;
-          localStorage.setItem("token", token);
-          setToken(token);
+            // Decode the JWT token to extract user information
+            const base64Payload = token.split(".")[1];
+            const decodedPayload = JSON.parse(atob(base64Payload));
 
-          // Decode the JWT token to extract user information
-          const base64Payload = token.split(".")[1];
-          const decodedPayload = JSON.parse(atob(base64Payload));
-          console.log(decodedPayload);
+            // Map the decoded payload to user profile properties
+            const userObj: UserProfile = {
+              name: decodedPayload.name || "",
+              email: decodedPayload.email || "",
+              role: decodedPayload.roles || "",
+            };
 
-          // Map the decoded payload to user profile properties
-          const userObj: UserProfile = {
-            name: decodedPayload.name || "",
-            email: decodedPayload.email || "",
-            role: decodedPayload.roles || "",
-          };
+            // Save user info in local storage and set user state
+            localStorage.setItem("user", JSON.stringify(userObj));
+            setUser(userObj);
 
-          // Save user info in local storage and set user state
-          localStorage.setItem("user", JSON.stringify(userObj));
-          setUser(userObj);
+            toast.success("Login Success!");
 
-          toast.success("Login Success!");
-
-          navigate("/dashboard");
-        }
-      })
-      .catch(() => toast.warning("Server error occurred"));
+            navigate("/dashboard");
+          }
+        })
+        .catch(() => toast.warning("Server error occurred"));
+    });
   };
   
 
@@ -104,7 +90,7 @@ export const UserProvider = ({ children }: Props) => {
 
   return (
     <UserContext.Provider
-      value={{ loginUser, user, token, logout, isLoggedIn, registerUser, sideMenuIsExpand, setSideMenuIsExpand, }}
+      value={{ loginUser, user, token, logout, isLoggedIn, sideMenuIsExpand, setSideMenuIsExpand, }}
     >
       {isReady ? children : null}
     </UserContext.Provider>

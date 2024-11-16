@@ -1,19 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAuth } from "../../Context/useAuth";
 import { useForm } from "react-hook-form";
+import { useSpinner } from "../../Context/SpinnerContext";
+import { RegistrationData, useRegister } from "../../Services/RegisterService";
+import { ApiError } from "../../Utils/ApiError";
 
 type Props = {};
 
-type RegisterFormsInputs = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-  password: string;
-  role: string;
-};
+type RegisterFormsInputs = RegistrationData
 
 const validation = Yup.object().shape({
   firstName: Yup.string().required("First name is required"),
@@ -25,16 +20,31 @@ const validation = Yup.object().shape({
 });
 
 const RegisterPage = (props: Props) => {
-  const { registerUser } = useAuth();
+  const { registerUser } = useRegister();
+  const { isLoading } = useSpinner();
+  const [serverError, setServerError] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError
   } = useForm<RegisterFormsInputs>({ resolver: yupResolver(validation) });
 
-  const handleLogin = (form: RegisterFormsInputs) => {
-    registerUser(form.firstName, form.lastName, form.email, form.username, form.password, form.role);
+  const handleLogin = async (formData: RegisterFormsInputs) => {
+
+    try {
+      await registerUser(formData);
+    } catch (error) {
+      if ((error as ApiError).message?.includes('Username')) {
+        setError('username', {
+          type: 'server',
+          message: (error as ApiError).message
+        });
+      }
+    }
   };
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -147,7 +157,6 @@ const RegisterPage = (props: Props) => {
                   ""
                 )}
               </div>
-              
               <div>
                 <label htmlFor="role"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
@@ -155,6 +164,7 @@ const RegisterPage = (props: Props) => {
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   {...register("role", { required: "Please select at least one role" })}
                 >
+                  <option key="role" value="">Select a role</option>
                   <option key="ROLE_VENDOR" value="ROLE_VENDOR">Vendor</option>
                   <option key="ROLE_INFLUENCER" value="ROLE_INFLUENCER">Influencer</option>
                   <option key="ROLE_FOLLOWER" value="ROLE_FOLLOWER">Follower</option>
@@ -165,10 +175,6 @@ const RegisterPage = (props: Props) => {
                   ""
                 )}
               </div>
-              
-
-
-
               <div className="flex items-center justify-between">
                 <a
                   href="#"
@@ -179,9 +185,11 @@ const RegisterPage = (props: Props) => {
               </div>
               <button
                 type="submit"
-                className="w-full text-white bg-lightGreen hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                disabled={isLoading}
+                className={`w-full text-white bg-lightGreen hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
               >
-                Sign in
+                {isLoading ? 'Processing...' : 'Sign up'}
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}
@@ -189,7 +197,7 @@ const RegisterPage = (props: Props) => {
                   href="#"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
-                  Sign up
+                  Sign in
                 </a>
               </p>
             </form>

@@ -3,16 +3,12 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../../Context/useAuth";
 import { useForm } from "react-hook-form";
+import { LoginData } from "../../Services/AuthService";
 
 type Props = {};
 
-type LoginFormsInputs = {
-  userName: string;
-  password: string;
-};
-
 const validation = Yup.object().shape({
-  userName: Yup.string().required("Username is required"),
+  username: Yup.string().required("Username is required"),
   password: Yup.string().required("Password is required"),
 });
 
@@ -22,10 +18,10 @@ const LoginPage = (props: Props) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormsInputs>({ resolver: yupResolver(validation) });
+  } = useForm<LoginData>({ resolver: yupResolver(validation) });
 
-  const handleLogin = (form: LoginFormsInputs) => {
-    loginUser(form.userName, form.password);
+  const handleLogin = (formData: LoginData) => {
+    loginUser(formData);
   };
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -51,10 +47,10 @@ const LoginPage = (props: Props) => {
                   id="username"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Username"
-                  {...register("userName")}
+                  {...register("username")}
                 />
-                {errors.userName ? (
-                  <p className="text-white">{errors.userName.message}</p>
+                {errors.username ? (
+                  <p className="text-white">{errors.username.message}</p>
                 ) : (
                   ""
                 )}
