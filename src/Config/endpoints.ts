@@ -2,11 +2,14 @@ export const ENDPOINTS = {
     AUTH: {
         LOGIN: '/auth/login',
         LOGOUT: '/auth/logout',
-        PROFILE: '/auth/profile'
+        PROFILE: '/auth/profile',
+        ACCOUNT_VERIFY: '/auth/verify',
+        RESEND_VERIFICATION_CODE: '/auth/resend'
+
     },
     REGISTRATION: {
         VENDOR: '/vendors/create',
         INFLUENCER: '/influencers/create',
-        FOLLOWER: '/followers/create'
+        FOLLOWER: '/followers/create',
     },
 } as const;

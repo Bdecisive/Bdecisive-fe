@@ -9,6 +9,7 @@ import VendorPage from '../Pages/VendorPage/VendorPage';
 import Dashboard from '../Pages/Dashboard/Dashboard';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import CategoryList from '../Pages/Admin/Category/CategoryList';
+import AccountVerifyPage from '../Pages/AccountVerify/AccountVerifyPage';
 
 export const router = createBrowserRouter([
   {
@@ -19,11 +20,9 @@ export const router = createBrowserRouter([
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
       {
-        path: "vendor",
+        path: "verify",
         element: (
-          <ProtectedRoute>
-            <VendorPage />
-          </ProtectedRoute>
+          <AccountVerifyPage />
         ),
       },
       {

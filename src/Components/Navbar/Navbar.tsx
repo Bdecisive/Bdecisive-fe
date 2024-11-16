@@ -12,7 +12,6 @@ const Navbar = (props: Props) => {
 
   const { isLoggedIn, logout, sideMenuIsExpand } = useAuth();
 
-  console.log(sideMenuIsExpand)
   return (
     <>
     <div

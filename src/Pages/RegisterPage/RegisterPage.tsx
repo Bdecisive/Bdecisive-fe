@@ -22,7 +22,6 @@ const validation = Yup.object().shape({
 const RegisterPage = (props: Props) => {
   const { registerUser } = useRegister();
   const { isLoading } = useSpinner();
-  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
