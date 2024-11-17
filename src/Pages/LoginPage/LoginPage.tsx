@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../../Context/useAuth";
@@ -14,15 +14,24 @@ const validation = Yup.object().shape({
 
 const LoginPage = (props: Props) => {
   const { loginUser } = useAuth();
+  const [serverError, setServerError] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginData>({ resolver: yupResolver(validation) });
 
-  const handleLogin = (formData: LoginData) => {
-    loginUser(formData);
+  const handleLogin = async (formData: LoginData) => {
+    try {
+      setServerError(null); // Clear any previous error
+      await loginUser(formData);
+    } catch (error: any) {
+      console.log('-------------------------------->>>>>' + error.message);
+      setServerError(error.message); // Set the error message
+    }
   };
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -31,6 +40,9 @@ const LoginPage = (props: Props) => {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Sign in to your account
             </h1>
+            {serverError && (
+              <p className="text-red-500 text-sm">{serverError}</p> // Display the server error
+            )}
             <form
               className="space-y-4 md:space-y-6"
               onSubmit={handleSubmit(handleLogin)}
@@ -49,10 +61,8 @@ const LoginPage = (props: Props) => {
                   placeholder="Username"
                   {...register("username")}
                 />
-                {errors.username ? (
+                {errors.username && (
                   <p className="text-white">{errors.username.message}</p>
-                ) : (
-                  ""
                 )}
               </div>
               <div>
@@ -69,10 +79,8 @@ const LoginPage = (props: Props) => {
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   {...register("password")}
                 />
-                {errors.password ? (
+                {errors.password && (
                   <p className="text-white">{errors.password.message}</p>
-                ) : (
-                  ""
                 )}
               </div>
               <div className="flex items-center justify-between">

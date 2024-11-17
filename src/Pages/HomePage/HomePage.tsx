@@ -2,11 +2,11 @@ import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { CompanySearch } from "../../company";
 import { searchCompanies } from "../../api";
 import Search from "../../Components/Search/Search";
-import ListPortfolio from "../../Components/Portfolio/ListPortfolio/ListPortfolio";
-import CardList from "../../Components/CardList/CardList";
 import { PortfolioGet } from "../../Models/Portfolio";
 import { portfolioAddAPI, portfolioDeleteAPI, portfolioGetAPI } from "../../Services/PortfolioService";
 import { toast } from "react-toastify";
+import ListPortfolio from "../../Components/Portfolio/ListPortfolio/ListPortfolio";
+import CardList from "../../Components/CardList/CardList";
 
 type Props = {};
 

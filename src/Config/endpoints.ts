@@ -12,4 +12,9 @@ export const ENDPOINTS = {
         INFLUENCER: '/influencers/create',
         FOLLOWER: '/followers/create',
     },
+    VENDOR: {
+        LIST: '/vendors/',
+        APPROVE: '/vendors/approve',
+        REJECT: '/vendors/reject',
+    }
 } as const;

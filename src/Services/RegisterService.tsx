@@ -6,15 +6,8 @@ import { useSpinnerAction } from "../Utils/useSpinnerAction";
 import { API_URL } from "../Config";
 import { ENDPOINTS } from "../Config/endpoints";
 import { ApiError } from "../Utils/ApiError";
-
-export interface RegistrationData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-  password: string;
-  role: string;
-}
+import { UserRole } from "../Models/enums";
+import { RegistrationData } from "../Models/Registration";
 
 export interface VerifyAccountData {
   username: string;
@@ -25,13 +18,13 @@ export const registerAPI = async (data: RegistrationData) => {
   try {
     let endpoint = API_URL;
     switch (data.role) {
-      case "ROLE_VENDOR":
+      case UserRole.VENDOR:
         endpoint += ENDPOINTS.REGISTRATION.VENDOR;
         break;
-      case "ROLE_INFLUENCER":
+      case UserRole.INFLUENCER:
         endpoint += ENDPOINTS.REGISTRATION.INFLUENCER;
         break;
-      case "ROLE_FOLLOWER":
+      case UserRole.FOLLOWER:
         endpoint += ENDPOINTS.REGISTRATION.FOLLOWER;
         break;
       default:

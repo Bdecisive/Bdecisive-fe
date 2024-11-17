@@ -3,8 +3,10 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useSpinner } from "../../Context/SpinnerContext";
-import { RegistrationData, useRegister } from "../../Services/RegisterService";
+import { useRegister } from "../../Services/RegisterService";
 import { ApiError } from "../../Utils/ApiError";
+import { UserRole } from "../../Models/enums";
+import { RegistrationData } from "../../Models/Registration";
 
 type Props = {};
 
@@ -17,18 +19,42 @@ const validation = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   password: Yup.string().required("Password is required"),
   role: Yup.string().required("Role is required"),
+  companyName: Yup.string().when('role', {
+    is: UserRole.VENDOR,
+    then: schema => schema.required('Company name is required'),
+  }),
+  phone: Yup.string().when('role', {
+    is: UserRole.VENDOR,
+    then: schema => schema.required('Phone number is required'),
+  }),
+  address: Yup.string().when('role', {
+    is: UserRole.VENDOR,
+    then: schema => schema.required('Address is required'),
+  }),
+  description: Yup.string().when('role', {
+    is: UserRole.VENDOR,
+    then: schema => schema.required('Description is required'),
+  }),
 });
 
 const RegisterPage = (props: Props) => {
   const { registerUser } = useRegister();
   const { isLoading } = useSpinner();
+  const [selectedRole, setSelectedRole] = useState('');
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
     setError
-  } = useForm<RegisterFormsInputs>({ resolver: yupResolver(validation) });
+  } = useForm<RegisterFormsInputs>({
+    resolver: yupResolver(validation),
+    mode: 'onChange'
+  });
+
+  // Watch the role field for changes
+  const role = watch('role');
 
   const handleLogin = async (formData: RegisterFormsInputs) => {
 
@@ -162,6 +188,7 @@ const RegisterPage = (props: Props) => {
                 <select id="role"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   {...register("role", { required: "Please select at least one role" })}
+                  onChange={(e) => setSelectedRole(e.target.value)}
                 >
                   <option key="role" value="">Select a role</option>
                   <option key="ROLE_VENDOR" value="ROLE_VENDOR">Vendor</option>
@@ -174,6 +201,87 @@ const RegisterPage = (props: Props) => {
                   ""
                 )}
               </div>
+
+              {selectedRole === 'ROLE_VENDOR' && (
+                <>
+                  <div>
+                    <label
+                      htmlFor="companyName"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Company Name
+                    </label>
+                    <input
+                      type="text"
+                      id="companyName"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Company Name"
+                      {...register("companyName")}
+                    />
+                    {errors.companyName && (
+                      <p className="text-red-500 text-sm mt-2">{errors.companyName.message}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="phone"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Phone
+                    </label>
+                    <input
+                      type="text"
+                      id="phone"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="phone"
+                      {...register("phone")}
+                    />
+                    {errors.phone && (
+                      <p className="text-red-500 text-sm mt-2">{errors.phone.message}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="address"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Address
+                    </label>
+                    <input
+                      type="text"
+                      id="address"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Address"
+                      {...register("address")}
+                    />
+                    {errors.address && (
+                      <p className="text-red-500 text-sm mt-2">{errors.address.message}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="description"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Details
+                    </label>
+                    <textarea
+                      id="description"
+                      rows={4}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Describe your company..."
+                      {...register("description")}
+                    />
+                    {errors.description && (
+                      <p className="text-red-500 text-sm mt-2">{errors.description.message}</p>
+                    )}
+                  </div>
+                </>
+              )}
+
               <div className="flex items-center justify-between">
                 <a
                   href="#"
@@ -182,6 +290,7 @@ const RegisterPage = (props: Props) => {
                   Forgot password?
                 </a>
               </div>
+
               <button
                 type="submit"
                 disabled={isLoading}

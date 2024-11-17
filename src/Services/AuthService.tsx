@@ -14,7 +14,7 @@ export const loginAPI = async (data: LoginData) => {
     const response = await axios.post<UserProfileToken>(`${API_URL}${ENDPOINTS.AUTH.LOGIN}`, data)
     return response;
   } catch (error) {
-    handleError(error);
+    throw error;
   }
 };
 
@@ -24,6 +24,6 @@ export const userProfile = async () => {
     console.log(JSON.stringify(data));
     return data;
   } catch (error) {
-    handleError(error);
+    throw error;
   }
 };

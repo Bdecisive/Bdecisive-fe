@@ -34,7 +34,9 @@ export const router = createBrowserRouter([
         ),
         children: [
           // { path: "", element: <div>Dashboard Home</div> }, // Add a dashboard home component if needed
+          { path: "vendors", element: <VendorPage /> },
           { path: "categories", element: <CategoryList /> },
+
           // Add other dashboard routes here
         ]
       },

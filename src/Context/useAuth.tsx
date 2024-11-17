@@ -44,37 +44,36 @@ export const UserProvider = ({ children }: Props) => {
 
   const loginUser = async (data: LoginData) => {
     await withSpinner(async () => {
-      await loginAPI(data)
-        .then((res) => {
-          if (res) {
-            const token = res.data.token;
-            localStorage.setItem("token", token);
-            setToken(token);
+      try {
+        const res = await loginAPI(data);
 
-            // Decode the JWT token to extract user information
-            const base64Payload = token.split(".")[1];
-            const decodedPayload = JSON.parse(atob(base64Payload));
+        if (res) {
+          const token = res.data.token;
+          localStorage.setItem("token", token);
+          setToken(token);
 
-            // Map the decoded payload to user profile properties
-            const userObj: UserProfile = {
-              name: decodedPayload.name || "",
-              email: decodedPayload.email || "",
-              role: decodedPayload.roles || "",
-            };
+          const base64Payload = token.split(".")[1];
+          const decodedPayload = JSON.parse(atob(base64Payload));
 
-            // Save user info in local storage and set user state
-            localStorage.setItem("user", JSON.stringify(userObj));
-            setUser(userObj);
+          const userObj: UserProfile = {
+            name: decodedPayload.name || "",
+            email: decodedPayload.email || "",
+            role: decodedPayload.roles || "",
+          };
 
-            toast.success("Login Success!");
+          localStorage.setItem("user", JSON.stringify(userObj));
+          setUser(userObj);
 
-            navigate("/dashboard");
-          }
-        })
-        .catch(() => toast.warning("Server error occurred"));
+          toast.success("Login Success!");
+          navigate("/dashboard");
+        }
+      } catch (error: any) {
+        const errorMessage = error?.response?.data?.message || "Server error occurred";
+        throw new Error(errorMessage); // Pass the message up to the LoginPage
+      }
     });
   };
-  
+
 
   const isLoggedIn = () => {
     return !!user;
