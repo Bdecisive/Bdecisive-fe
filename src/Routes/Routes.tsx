@@ -10,6 +10,8 @@ import Dashboard from '../Pages/Dashboard/Dashboard';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import CategoryList from '../Pages/Admin/Category/CategoryList';
 import AccountVerifyPage from '../Pages/AccountVerify/AccountVerifyPage';
+import UpdateProfilePage from "../Pages/UpdateProfilePage/UpdateProfilePage";
+
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +21,7 @@ export const router = createBrowserRouter([
       { path: "", element: <HomePage /> },
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
+      { path: "update-profile", element: <UpdateProfilePage /> },
       {
         path: "verify",
         element: (
