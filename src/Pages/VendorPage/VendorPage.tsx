@@ -5,6 +5,7 @@ import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import Pagination from '../../Components/Pagination/Pagination';
 import { Vendor } from '../../Models/Vendor';
 import { useVendor } from '../../Services/VendorService';
+import { rejects } from 'assert';
 
 const VendorPage = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -13,7 +14,7 @@ const VendorPage = () => {
   const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null);
   const ITEMS_PER_PAGE = 10;
 
-  const { vendors, fetchVendors, approveVendor, deleteVendor } = useVendor();
+  const { vendors, fetchVendors, approveVendor, rejectVendor } = useVendor();
 
   // Initial fetch
   useEffect(() => {
@@ -72,9 +73,7 @@ const VendorPage = () => {
       confirmButtonClass: 'bg-green-600 hover:bg-green-700 focus:ring-green-500',
       onConfirm: async () => {
         try {
-          // Add your approve API call here
-          console.log('Approving vendor:', vendor.id);
-          // After successful approval, you might want to refresh your data
+          approveVendor(vendor.id);
         } catch (error) {
           console.error('Error approving vendor:', error);
         }
@@ -91,9 +90,7 @@ const VendorPage = () => {
       confirmButtonClass: 'bg-red-600 hover:bg-red-700 focus:ring-red-500',
       onConfirm: async () => {
         try {
-          // Add your reject API call here
-          console.log('Deleting vendor:', vendor.id);
-          // After successful deletion, you might want to refresh your data
+          rejectVendor(vendor.id);
         } catch (error) {
           console.error('Error deleting vendor:', error);
         }
@@ -213,11 +210,11 @@ const VendorPage = () => {
                   </td>
                   {activeTab !== 0 && (
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <span className={`mt-1 inline-flex px-2 text-xs font-semibold leading-5 rounded-full ${vendor.isApproved
+                      <span className={`mt-1 inline-flex px-2 text-xs font-semibold leading-5 rounded-full ${vendor.approved
                         ? 'bg-green-100 text-green-800'
-                        : 'bg-yellow-100 text-yellow-800'
+                        : 'bg-red-100 text-red-800'
                         }`}>
-                        {vendor?.isApproved ? 'Approved' : 'Rejected'}
+                        {vendor.approved ? 'Approved' : 'Rejected'}
                       </span>
                     </td>
                   )}
@@ -234,7 +231,7 @@ const VendorPage = () => {
                       >
                         View
                       </button>
-                      {!vendor.approvedDate && (
+                      {(!vendor.approvedDate || !vendor.approved) && (
                         <button
                           onClick={() => handleApprove(vendor)}
                           className="text-green-600 hover:text-green-900 transition-colors"
@@ -242,12 +239,14 @@ const VendorPage = () => {
                           Approve
                         </button>
                       )}
-                      <button
-                        onClick={() => handleReject(vendor)}
-                        className="text-red-600 hover:text-red-900 transition-colors"
-                      >
-                        Reject
-                      </button>
+                      {(!vendor.approvedDate || vendor.approved) && (
+                        <button
+                          onClick={() => handleReject(vendor)}
+                          className="text-red-600 hover:text-red-900 transition-colors"
+                        >
+                          Reject
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -323,10 +322,10 @@ const VendorPage = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700">Status</label>
                 <span className={`mt-1 inline-flex px-2 text-xs font-semibold leading-5 rounded-full ${selectedVendor.approvedDate
-                  ? 'bg-green-100 text-green-800'
+                  ? (selectedVendor.approved ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800')
                   : 'bg-yellow-100 text-yellow-800'
                   }`}>
-                  {selectedVendor.approvedDate ? 'Approved' : 'Pending'}
+                  {selectedVendor.approvedDate ? (selectedVendor.approved ? 'Approved' : 'Rejected') : 'Pending'}
                 </span>
               </div>
               <div>

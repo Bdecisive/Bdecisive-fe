@@ -6,7 +6,7 @@ export interface Vendor {
   lastName: string;
   companyName: string;
   phone: string;
-  isApproved: boolean;
+  approved: boolean;
   createdAt: string;
   address?: string;
   approvedDate: string;

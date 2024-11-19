@@ -2,25 +2,25 @@
 import axios from 'axios';
 import { Vendor } from '../Models/Vendor';
 import { API_URL } from '../Config';
-import { ENDPOINTS } from '../Config/endpoints';
+import { buildUrl, ENDPOINTS } from '../Config/endpoints';
 import { toast } from 'react-toastify';
 import { useSpinnerAction } from '../Utils/useSpinnerAction';
 import { useState } from 'react';
+import { api } from './ApiService';
 
 export const VendorService = {
     async getVendors(): Promise<Vendor[]> {
         try {
-            const response = await axios.get(`${API_URL}${ENDPOINTS.VENDOR.LIST}`);
+            const response = await api.get(buildUrl(ENDPOINTS.VENDOR.LIST));
             return response.data;
         } catch (error) {
             throw error;
         }
     },
 
-    async approveVendor(vendorId: string): Promise<Vendor> {
+    async approveVendor(vendorId: string): Promise<void> {
         try {
-            const response = await axios.patch(`${API_URL}/vendors/${vendorId}/approve`);
-            return response.data;
+            await api.patch(buildUrl(ENDPOINTS.VENDOR.APPROVE(vendorId)));
         } catch (error) {
             throw error;
         }
@@ -28,7 +28,7 @@ export const VendorService = {
 
     async rejectVendor(vendorId: string): Promise<void> {
         try {
-            await axios.delete(`${API_URL}/vendors/${vendorId}`);
+            await api.patch(buildUrl(ENDPOINTS.VENDOR.REJECT(vendorId)));
         } catch (error) {
             throw error;
         }
@@ -57,8 +57,8 @@ export const useVendor = () => {
         await withSpinner(async () => {
             try {
                 await VendorService.approveVendor(vendorId);
-                toast.success('Vendor approved successfully');
-                await fetchVendors(); // Refresh list after approval
+                toast.success('Vendor has approved successfully');
+                await fetchVendors();
             } catch (error) {
                 toast.error('Failed to approve vendor');
                 console.error('Error approving vendor:', error);
@@ -67,12 +67,12 @@ export const useVendor = () => {
         });
     };
 
-    const deleteVendor = async (vendorId: string) => {
+    const rejectVendor = async (vendorId: string) => {
         await withSpinner(async () => {
             try {
                 await VendorService.rejectVendor(vendorId);
-                toast.success('Vendor deleted successfully');
-                await fetchVendors(); // Refresh list after deletion
+                toast.success('Vendor has rejected successfully');
+                await fetchVendors(); 
             } catch (error) {
                 toast.error('Failed to delete vendor');
                 console.error('Error deleting vendor:', error);
@@ -85,6 +85,6 @@ export const useVendor = () => {
         vendors,
         fetchVendors,
         approveVendor,
-        deleteVendor
+        rejectVendor
     };
 };

@@ -1,3 +1,5 @@
+import { API_URL } from ".";
+
 export const ENDPOINTS = {
     AUTH: {
         LOGIN: '/auth/login',
@@ -14,7 +16,13 @@ export const ENDPOINTS = {
     },
     VENDOR: {
         LIST: '/vendors/',
-        APPROVE: '/vendors/approve',
-        REJECT: '/vendors/reject',
+        APPROVE: (vendorId: string) => `/vendors/${vendorId}/approve`,
+        REJECT: (vendorId: string) => `/vendors/${vendorId}/reject`,
     }
 } as const;
+
+// Helper function to build full URL
+export const buildUrl = (endpoint: string) => {
+    const BASE_URL = API_URL || 'http://localhost:8080/api';
+    return `${BASE_URL}${endpoint}`;
+};
