@@ -7,6 +7,7 @@ import React from "react";
 import axios from "axios";
 import { useSpinnerAction } from "../Utils/useSpinnerAction";
 import { useSpinner } from "./SpinnerContext";
+import { UserRole } from "../Models/enums";
 
 type UserContextType = {
   user: UserProfile | null;
@@ -14,6 +15,10 @@ type UserContextType = {
   loginUser: (data: LoginData) => void;
   logout: () => void;
   isLoggedIn: () => boolean;
+  isAdmin: () => boolean;
+  isVendor: () => boolean;
+  isInfluencer: () => boolean;
+  isFollower: () => boolean;
   sideMenuIsExpand: boolean;
   setSideMenuIsExpand: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -79,6 +84,22 @@ export const UserProvider = ({ children }: Props) => {
     return !!user;
   };
 
+  const isAdmin = () => {
+    return user?.role === UserRole.ADMIN;
+  };
+
+  const isVendor = () => {
+    return user?.role === UserRole.VENDOR;
+  }
+
+  const isInfluencer = () => {
+    return user?.role === UserRole.INFLUENCER;
+  }
+
+  const isFollower = () => {
+    return user?.role === UserRole.FOLLOWER;
+  }
+
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -89,7 +110,8 @@ export const UserProvider = ({ children }: Props) => {
 
   return (
     <UserContext.Provider
-      value={{ loginUser, user, token, logout, isLoggedIn, sideMenuIsExpand, setSideMenuIsExpand, }}
+      value={{ loginUser, user, token, logout, isLoggedIn, sideMenuIsExpand, setSideMenuIsExpand, 
+        isAdmin, isVendor, isInfluencer, isFollower}}
     >
       {isReady ? children : null}
     </UserContext.Provider>

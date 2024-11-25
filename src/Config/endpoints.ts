@@ -18,6 +18,12 @@ export const ENDPOINTS = {
         LIST: '/vendors/',
         APPROVE: (vendorId: string) => `/vendors/${vendorId}/approve`,
         REJECT: (vendorId: string) => `/vendors/${vendorId}/reject`,
+    },
+    CATEGORY: {
+        LIST: '/categories/',
+        CREATE: '/categories/create',
+        APPROVE: (categoryId: string) => `/categories/${categoryId}/approve`,
+        REJECT: (categoryId: string) => `/categories/${categoryId}/reject`,
     }
 } as const;
 

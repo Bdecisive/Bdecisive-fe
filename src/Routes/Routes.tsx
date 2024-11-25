@@ -5,11 +5,11 @@ import HomePage from "../Pages/HomePage/HomePage";
 import LoginPage from "../Pages/LoginPage/LoginPage";
 import RegisterPage from "../Pages/RegisterPage/RegisterPage";
 import ProtectedRoute from "./ProtectedRoute";
-import VendorPage from '../Pages/VendorPage/VendorPage';
 import Dashboard from '../Pages/Dashboard/Dashboard';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import CategoryList from '../Pages/Admin/Category/CategoryList';
 import AccountVerifyPage from '../Pages/AccountVerify/AccountVerifyPage';
+import CaptegoryPage from '../Pages/CategoryPage/CategoryPage';
+import VendorPage from '../Pages/Admin/Vendor/VendorPage';
 
 export const router = createBrowserRouter([
   {
@@ -35,7 +35,7 @@ export const router = createBrowserRouter([
         children: [
           // { path: "", element: <div>Dashboard Home</div> }, // Add a dashboard home component if needed
           { path: "vendors", element: <VendorPage /> },
-          { path: "categories", element: <CategoryList /> },
+          { path: "categories", element: <CaptegoryPage /> },
 
           // Add other dashboard routes here
         ]

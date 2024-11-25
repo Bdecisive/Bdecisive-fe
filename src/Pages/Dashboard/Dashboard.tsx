@@ -15,7 +15,9 @@ const Dashboard = (props: Props) => {
           className={`flex-1 min-h-screen mx-0 bg-slate-100 transition-all duration-300 ease-in-out ${
             sideMenuIsExpand ? "md:ml-72" : "md:ml-20"
           }`}>
-          <Outlet />
+          <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+            <Outlet />
+          </div>
       </div>
     </>
   );

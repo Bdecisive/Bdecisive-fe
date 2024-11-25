@@ -8,7 +8,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ setExpand }) => {
 
-  const { user } = useAuth();
+  const { user, isAdmin, isVendor } = useAuth();
 
   const name = user?.name;
   const link = "/";
@@ -187,28 +187,30 @@ const Sidebar: React.FC<SidebarProps> = ({ setExpand }) => {
               </li>
 
               {/* Vendor */}
-              <li>
-                <a
-                  role="button"
-                  tabIndex={0}
-                  id="vendor"
-                  onClick={() => handleNavigate("vendors", "/dashboard/vendors")}
-                  className={[
-                    "group m-0 flex cursor-pointer rounded-lg items-center justify-between h-12 py-0 pr-3 mb-1 focus:outline-none pl-4",
-                    activeName === "vendors"
-                      ? "text-blue-600 font-semibold bg-blue-200/20"
-                      : "text-slate-500",
-                    "hover:bg-slate-300/20",
-                  ].join(" ")}
-                >
-                  <div className="flex items-center gap-3">
-                    <i className="fas fa-list text-current h-5 w-5"></i>
-                    <div className={`truncate ${isExpand ? "" : isExpandOnHover ? "" : "w-0 h-0 opacity-0"}`}>
-                      Vendors
+              {isAdmin() && (
+                <li>
+                  <a
+                    role="button"
+                    tabIndex={0}
+                    id="vendor"
+                    onClick={() => handleNavigate("vendors", "/dashboard/vendors")}
+                    className={[
+                      "group m-0 flex cursor-pointer rounded-lg items-center justify-between h-12 py-0 pr-3 mb-1 focus:outline-none pl-4",
+                      activeName === "vendors"
+                        ? "text-blue-600 font-semibold bg-blue-200/20"
+                        : "text-slate-500",
+                      "hover:bg-slate-300/20",
+                    ].join(" ")}
+                  >
+                    <div className="flex items-center gap-3">
+                      <i className="fas fa-list text-current h-5 w-5"></i>
+                      <div className={`truncate ${isExpand ? "" : isExpandOnHover ? "" : "w-0 h-0 opacity-0"}`}>
+                        Vendors
+                      </div>
                     </div>
-                  </div>
-                </a>
-              </li>
+                  </a>
+                </li>
+              )}
 
               {/* Category */}
               <li>

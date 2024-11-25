@@ -1,4 +1,3 @@
-// services/vendor.service.ts
 import axios from 'axios';
 import { Vendor } from '../Models/Vendor';
 import { API_URL } from '../Config';

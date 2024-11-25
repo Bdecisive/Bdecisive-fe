@@ -13,5 +13,5 @@ export interface Vendor {
 }
 
 // You could also add type for vendor creation/update
-export type CreateVendorDto = Omit<Vendor, 'id' | 'createdAt' | 'lastLogin'>;
+export type CreateVendorDto = Omit<Vendor, 'id' | 'createdAt'>;
 export type UpdateVendorDto = Partial<CreateVendorDto>;
