@@ -67,10 +67,9 @@ const Sidebar: React.FC<SidebarProps> = ({ setExpand }) => {
         },
         [rootEl]: {
           open: rootEl === name ? false : true,
-          height: `${
-            (listRef.current[rootEl]?.scrollHeight || 0) -
+          height: `${(listRef.current[rootEl]?.scrollHeight || 0) -
             (listRef.current[name]?.scrollHeight || 0)
-          }px`
+            }px`
         }
       }));
     } else {
@@ -82,10 +81,9 @@ const Sidebar: React.FC<SidebarProps> = ({ setExpand }) => {
         },
         [rootEl]: {
           open: true,
-          height: `${
-            (listRef.current[rootEl]?.scrollHeight || 0) +
+          height: `${(listRef.current[rootEl]?.scrollHeight || 0) +
             (listRef.current[name]?.scrollHeight || 0)
-          }px`
+            }px`
         }
       }));
     }
@@ -97,10 +95,9 @@ const Sidebar: React.FC<SidebarProps> = ({ setExpand }) => {
       className={[
         "bg-slate-50 border-r border-slate-100 shadow-sm absolute inset-y-0 left-0",
         "duration-300 ease-in-out md:fixed md:translate-x-0",
-        `${
-          isExpand
-            ? "bg-slate-50 w-72"
-            : isExpandOnHover
+        `${isExpand
+          ? "bg-slate-50 w-72"
+          : isExpandOnHover
             ? "bg-slate-50/70 w-72 backdrop-blur-md"
             : "bg-slate-50 w-20"
         }`
@@ -115,9 +112,8 @@ const Sidebar: React.FC<SidebarProps> = ({ setExpand }) => {
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className={`${
-            isExpand ? "rotate-0" : "rotate-180"
-          } transform duration-500 h-4 w-4`}
+          className={`${isExpand ? "rotate-0" : "rotate-180"
+            } transform duration-500 h-4 w-4`}
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -140,20 +136,18 @@ const Sidebar: React.FC<SidebarProps> = ({ setExpand }) => {
               className="text-center flex flex-col items-center justify-center"
             >
               <div
-                className={`rounded-full border-4 border-white overflow-hidden duration-300 bg-gray-100 flex items-center justify-center ${
-                  isExpand
+                className={`rounded-full border-4 border-white overflow-hidden duration-300 bg-gray-100 flex items-center justify-center ${isExpand
                     ? "h-28 w-28"
                     : isExpandOnHover
-                    ? "h-28 w-28"
-                    : "h-12 w-12"
-                }`}
+                      ? "h-28 w-28"
+                      : "h-12 w-12"
+                  }`}
               >
                 <img src={profilePic} className="block" alt="" />
               </div>
               <div
-                className={`text-base font-semibold text-slate-700 mt-3 truncate duration-300 ${
-                  isExpand ? "" : isExpandOnHover ? "" : "w-0 h-0 opacity-0"
-                }`}
+                className={`text-base font-semibold text-slate-700 mt-3 truncate duration-300 ${isExpand ? "" : isExpandOnHover ? "" : "w-0 h-0 opacity-0"
+                  }`}
               >
                 {name}
               </div>
@@ -235,6 +229,33 @@ const Sidebar: React.FC<SidebarProps> = ({ setExpand }) => {
                   </div>
                 </a>
               </li>
+
+              {/* Product */}
+              {isVendor() && (
+                <li>
+                  <a
+                    role="button"
+                    tabIndex={0}
+                    id="product"
+                    onClick={() => handleNavigate("product", "/dashboard/products")}
+                    className={[
+                      "group m-0 flex cursor-pointer rounded-lg items-center justify-between h-12 py-0 pr-3 mb-1 focus:outline-none pl-4",
+                      activeName === "product"
+                        ? "text-blue-600 font-semibold bg-blue-200/20"
+                        : "text-slate-500",
+                      "hover:bg-slate-300/20",
+                    ].join(" ")}
+                  >
+                    <div className="flex items-center gap-3">
+                      <i className="fas fa-list text-current h-5 w-5"></i>
+                      <div className={`truncate ${isExpand ? "" : isExpandOnHover ? "" : "w-0 h-0 opacity-0"}`}>
+                        Product
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              )}
+
 
               {/* Transaksi */}
               <li>

@@ -61,9 +61,10 @@ export const UserProvider = ({ children }: Props) => {
           const decodedPayload = JSON.parse(atob(base64Payload));
 
           const userObj: UserProfile = {
-            name: decodedPayload.name || "",
-            email: decodedPayload.email || "",
-            role: decodedPayload.roles || "",
+            id: decodedPayload.id || '',
+            name: decodedPayload.name || '',
+            email: decodedPayload.email || '',
+            role: decodedPayload.roles || '',
           };
 
           localStorage.setItem("user", JSON.stringify(userObj));

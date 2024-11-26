@@ -10,7 +10,6 @@ import Pagination from '../../../Components/Pagination/Pagination';
 import { Modal, ModalFooter, ModalHeader } from '../../../Components/Modal';
 import ConfirmationModal from '../../ConfirmationModal/ConfirmationModal';
 import { formatDate, formatDateTime } from '../../../Utils/DateHelper';
-import { ApiError } from '../../../Utils/ApiError';
 
 const AdminCategoryPage = () => {
   const [activeTab, setActiveTab] = useState(0);

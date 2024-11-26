@@ -21,9 +21,16 @@ export const ENDPOINTS = {
     },
     CATEGORY: {
         LIST: '/categories/',
+        GLOBAL_LIST: '/categories/global',
         CREATE: '/categories/create',
         APPROVE: (categoryId: string) => `/categories/${categoryId}/approve`,
         REJECT: (categoryId: string) => `/categories/${categoryId}/reject`,
+    },
+    PRODUCT: {
+        CREATE: '/products/create',
+        VENDOR_LIST: (userId: string) => `/products/${userId}/vendor`,
+        UPDATE: (productId: string) => `/products/${productId}/update`,
+        DELETE: (productId: string) => `/products/${productId}/delete`,
     }
 } as const;
 

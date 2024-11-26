@@ -3,12 +3,21 @@ import { toast } from 'react-toastify';
 import { useSpinnerAction } from '../Utils/useSpinnerAction';
 import { useState } from 'react';
 import { api } from './ApiService';
-import { Category, CreateCategoryData } from '../Models/Category';
+import { Category, CreateCategoryData, GlobalCategory } from '../Models/Category';
 
 export const CategoryService = {
     async getCategories(): Promise<Category[]> {
         try {
             const response = await api.get(buildUrl(ENDPOINTS.CATEGORY.LIST));
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async getGlobalCategories(): Promise<Category[]> {
+        try {
+            const response = await api.get(buildUrl(ENDPOINTS.CATEGORY.GLOBAL_LIST));
             return response.data;
         } catch (error) {
             throw error;
@@ -44,11 +53,26 @@ export const CategoryService = {
 export const useCategory = () => {
     const withSpinner = useSpinnerAction();
     const [categories, setCategories] = useState<Category[]>([]);
+    const [globalCategories, setGlobalCategories] = useState<GlobalCategory[]>([]);
 
     const fetchCategories = async () => {
         await withSpinner(async () => {
             try {
                 const response = await CategoryService.getCategories();
+                setCategories(response);
+                return response;
+            } catch (error) {
+                toast.error('Failed to fetch vendors');
+                console.error('Error fetching vendors:', error);
+                throw error;
+            }
+        });
+    };
+
+    const fetchGlobalCategories = async () => {
+        await withSpinner(async () => {
+            try {
+                const response = await CategoryService.getGlobalCategories();
                 setCategories(response);
                 return response;
             } catch (error) {
@@ -104,6 +128,7 @@ export const useCategory = () => {
     return {
         categories,
         fetchCategories,
+        fetchGlobalCategories,
         createCategory,
         approveCategory,
         rejectCategory

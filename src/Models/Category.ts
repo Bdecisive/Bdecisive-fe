@@ -10,3 +10,8 @@ export interface Category {
 }
 
 export type CreateCategoryData = Omit<Category, 'id' | 'vendorName' | 'companyName' | 'approved' | 'approvedDate' | 'createdAt'>;
+
+export interface GlobalCategory {
+    id: string;
+    name: string;
+}
