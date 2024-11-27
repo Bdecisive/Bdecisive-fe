@@ -1,10 +1,10 @@
 // pages/VendorPage/VendorPage.tsx
 import React, { useEffect, useState } from 'react';
-import { Modal, ModalFooter, ModalHeader } from '../../Components/Modal';
-import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
-import Pagination from '../../Components/Pagination/Pagination';
-import { Vendor } from '../../Models/Vendor';
-import { useVendor } from '../../Services/VendorService';
+import { Modal, ModalFooter, ModalHeader } from '../../../Components/Modal';
+import ConfirmationModal from '../../ConfirmationModal/ConfirmationModal';
+import Pagination from '../../../Components/Pagination/Pagination';
+import { Vendor } from '../../../Models/Vendor';
+import { useVendor } from '../../../Services/VendorService';
 import { rejects } from 'assert';
 
 const VendorPage = () => {
@@ -99,7 +99,7 @@ const VendorPage = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-4 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">

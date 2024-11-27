@@ -27,7 +27,6 @@ const LoginPage = (props: Props) => {
       setServerError(null); // Clear any previous error
       await loginUser(formData);
     } catch (error: any) {
-      console.log('-------------------------------->>>>>' + error.message);
       setServerError(error.message); // Set the error message
     }
   };
