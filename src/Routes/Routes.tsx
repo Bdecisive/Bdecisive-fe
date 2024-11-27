@@ -10,8 +10,8 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import AccountVerifyPage from '../Pages/AccountVerify/AccountVerifyPage';
 import CaptegoryPage from '../Pages/CategoryPage/CategoryPage';
 import VendorPage from '../Pages/Admin/Vendor/VendorPage';
-import ProductPage from '../Pages/Vendor/Product/VendorProductPage';
 import UpdateProfilePage from "../Pages/UpdateProfilePage/UpdateProfilePage";
+import ProductPage from '../Pages/Vendor/Product/VendorProductPage';
 
 
 export const router = createBrowserRouter([
