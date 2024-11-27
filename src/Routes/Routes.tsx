@@ -11,6 +11,8 @@ import AccountVerifyPage from '../Pages/AccountVerify/AccountVerifyPage';
 import CaptegoryPage from '../Pages/CategoryPage/CategoryPage';
 import VendorPage from '../Pages/Admin/Vendor/VendorPage';
 import ProductPage from '../Pages/Vendor/Product/VendorProductPage';
+import UpdateProfilePage from "../Pages/UpdateProfilePage/UpdateProfilePage";
+
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +22,7 @@ export const router = createBrowserRouter([
       { path: "", element: <HomePage /> },
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
+      { path: "update-profile", element: <UpdateProfilePage /> },
       {
         path: "verify",
         element: (
