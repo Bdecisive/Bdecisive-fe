@@ -33,7 +33,7 @@ export const CategoryService = {
         }
     },
 
-    async approveCategory(userId: string): Promise<void> {
+    async approveCategory(userId: number): Promise<void> {
         try {
             await api.patch(buildUrl(ENDPOINTS.CATEGORY.APPROVE(userId)));
         } catch (error) {
@@ -41,7 +41,7 @@ export const CategoryService = {
         }
     },
 
-    async rejectCategory(userId: string): Promise<void> {
+    async rejectCategory(userId: number): Promise<void> {
         try {
             await api.patch(buildUrl(ENDPOINTS.CATEGORY.REJECT(userId)));
         } catch (error) {
@@ -97,7 +97,7 @@ export const useCategory = () => {
         });
     };
 
-    const approveCategory = async (userId: string) => {
+    const approveCategory = async (userId: number) => {
         await withSpinner(async () => {
             try {
                 await CategoryService.approveCategory(userId);
@@ -111,7 +111,7 @@ export const useCategory = () => {
         });
     };
 
-    const rejectCategory = async (userId: string) => {
+    const rejectCategory = async (userId: number) => {
         await withSpinner(async () => {
             try {
                 await CategoryService.rejectCategory(userId);

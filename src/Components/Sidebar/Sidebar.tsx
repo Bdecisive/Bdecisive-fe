@@ -8,7 +8,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ setExpand }) => {
 
-  const { user, isAdmin, isVendor } = useAuth();
+  const { user, isAdmin, isVendor, isInfluencer } = useAuth();
 
   const name = user?.name;
   const link = "/";
@@ -137,10 +137,10 @@ const Sidebar: React.FC<SidebarProps> = ({ setExpand }) => {
             >
               <div
                 className={`rounded-full border-4 border-white overflow-hidden duration-300 bg-gray-100 flex items-center justify-center ${isExpand
+                  ? "h-28 w-28"
+                  : isExpandOnHover
                     ? "h-28 w-28"
-                    : isExpandOnHover
-                      ? "h-28 w-28"
-                      : "h-12 w-12"
+                    : "h-12 w-12"
                   }`}
               >
                 <img src={profilePic} className="block" alt="" />
@@ -256,6 +256,30 @@ const Sidebar: React.FC<SidebarProps> = ({ setExpand }) => {
                 </li>
               )}
 
+              {isInfluencer() && (
+                <li>
+                  <a
+                    role="button"
+                    tabIndex={0}
+                    id="review"
+                    onClick={() => handleNavigate("review", "/dashboard/reviews")}
+                    className={[
+                      "group m-0 flex cursor-pointer rounded-lg items-center justify-between h-12 py-0 pr-3 mb-1 focus:outline-none pl-4",
+                      activeName === "review"
+                        ? "text-blue-600 font-semibold bg-blue-200/20"
+                        : "text-slate-500",
+                      "hover:bg-slate-300/20",
+                    ].join(" ")}
+                  >
+                    <div className="flex items-center gap-3">
+                      <i className="fas fa-list text-current h-5 w-5"></i>
+                      <div className={`truncate ${isExpand ? "" : isExpandOnHover ? "" : "w-0 h-0 opacity-0"}`}>
+                        Review
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              )}
 
               {/* Transaksi */}
               <li>

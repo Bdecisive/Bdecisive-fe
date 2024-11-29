@@ -16,21 +16,30 @@ export const ENDPOINTS = {
     },
     VENDOR: {
         LIST: '/vendors/',
-        APPROVE: (vendorId: string) => `/vendors/${vendorId}/approve`,
-        REJECT: (vendorId: string) => `/vendors/${vendorId}/reject`,
+        APPROVE: (vendorId: number) => `/vendors/${vendorId}/approve`,
+        REJECT: (vendorId: number) => `/vendors/${vendorId}/reject`,
     },
     CATEGORY: {
         LIST: '/categories/',
         GLOBAL_LIST: '/categories/global',
         CREATE: '/categories/create',
-        APPROVE: (categoryId: string) => `/categories/${categoryId}/approve`,
-        REJECT: (categoryId: string) => `/categories/${categoryId}/reject`,
+        APPROVE: (categoryId: number) => `/categories/${categoryId}/approve`,
+        REJECT: (categoryId: number) => `/categories/${categoryId}/reject`,
     },
     PRODUCT: {
         CREATE: '/products/create',
-        VENDOR_LIST: (userId: string) => `/products/${userId}/vendor`,
-        UPDATE: (productId: string) => `/products/${productId}/update`,
-        DELETE: (productId: string) => `/products/${productId}/delete`,
+        VENDOR_LIST: (userId: number) => `/products/vendor/${userId}`,
+        CATEGORY_LIST: (categoryId: number) => `/products/category/${categoryId}`,
+        UPDATE: (productId: number) => `/products/${productId}/update`,
+        DELETE: (productId: number) => `/products/${productId}/delete`,
+    },
+    REVIEW: {
+        CREATE: '/reviews/create',
+        PRODUCT_LIST: (productId: number) => `/reviews/product/${productId}`,
+        CATEGORY_LIST: (categoryId: number) => `/reviews/category/${categoryId}`,
+        USER_LIST: (userId: number) => `/reviews/user/${userId}`,
+        UPDATE: (reviewId: number) => `/reviews/${reviewId}/update`,
+        DELETE: (reviewId: number) => `/reviews/${reviewId}/delete`,
     }
 } as const;
 

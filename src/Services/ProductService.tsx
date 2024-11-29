@@ -7,7 +7,7 @@ import { buildUrl, ENDPOINTS } from '../Config/endpoints';
 import { useSpinnerAction } from '../Utils/useSpinnerAction';
 
 export const ProductService = {
-  async getProductsByVendor(userId: string): Promise<Product[]> {
+  async getProductsByVendor(userId: number): Promise<Product[]> {
     const response = await api.get(ENDPOINTS.PRODUCT.VENDOR_LIST(userId));
     return response.data;
   },
@@ -17,13 +17,18 @@ export const ProductService = {
     return response.data;
   },
 
-  async updateProduct(productId: string, data: SaveProductData): Promise<Product> {
+  async updateProduct(productId: number, data: SaveProductData): Promise<Product> {
     const response = await api.put(buildUrl(ENDPOINTS.PRODUCT.UPDATE(productId)), data);
     return response.data;
   },
 
-  async deleteProduct(productId: string): Promise<void> {
+  async deleteProduct(productId: number): Promise<void> {
     await api.delete(buildUrl(ENDPOINTS.PRODUCT.DELETE(productId)));
+  },
+
+  async getProductsByCategory(categoryId: number): Promise<Product[]> {
+    const response = await api.get(ENDPOINTS.PRODUCT.CATEGORY_LIST(categoryId));
+    return response.data;
   }
 };
 
@@ -31,7 +36,7 @@ export const useProduct = () => {
   const withSpinner = useSpinnerAction();
   const [products, setProducts] = useState<Product[]>([]);
 
-  const fetchProductsByVendor = async (userId: string) => {
+  const fetchProductsByVendor = async (userId: number) => {
     await withSpinner(async () => {
       try {
         if (userId) {
@@ -48,12 +53,31 @@ export const useProduct = () => {
     });
   };
 
+  const fetchProductsByCategory = async (categoryId: number) => {
+    await withSpinner(async () => {
+      try {
+        if (categoryId) {
+            const response = await ProductService.getProductsByCategory(categoryId);
+            setProducts(response);
+        } else {
+            setProducts([]);
+        }
+      } catch (error) {
+        toast.error('Failed to fetch products by category');
+        console.error('Error fetching products by category:', error);
+        throw error;
+      }
+    });
+  };
+
   const createProduct = async (data: SaveProductData) => {
     await withSpinner(async () => {
       try {
         await ProductService.createProduct(data);
         toast.success('Product created successfully');
-        await fetchProductsByVendor(data.userId || ''); 
+        if (data.userId) {
+          await fetchProductsByVendor(data.userId); 
+        }
       } catch (error) {
         toast.error('Failed to create product');
         console.error('Error creating product:', error);
@@ -62,12 +86,14 @@ export const useProduct = () => {
     });
   };
 
-  const updateProduct = async (productId: string, data: SaveProductData) => {
+  const updateProduct = async (productId: number, data: SaveProductData) => {
     await withSpinner(async () => {
       try {
         await ProductService.updateProduct(productId, data);
         toast.success('Product updated successfully');
-        await fetchProductsByVendor(data.userId || ''); 
+        if (data.userId) {
+          await fetchProductsByVendor(data.userId); 
+        }
       } catch (error) {
         toast.error('Failed to update product');
         console.error('Error updating product:', error);
@@ -76,7 +102,7 @@ export const useProduct = () => {
     });
   };
 
-  const deleteProduct = async (productId: string, userId: string) => {
+  const deleteProduct = async (productId: number, userId: number) => {
     await withSpinner(async () => {
       try {
         await ProductService.deleteProduct(productId);
@@ -93,6 +119,7 @@ export const useProduct = () => {
   return {
     products,
     fetchProductsByVendor,
+    fetchProductsByCategory,
     createProduct,
     updateProduct,
     deleteProduct

@@ -17,7 +17,7 @@ export const VendorService = {
         }
     },
 
-    async approveVendor(vendorId: string): Promise<void> {
+    async approveVendor(vendorId: number): Promise<void> {
         try {
             await api.patch(buildUrl(ENDPOINTS.VENDOR.APPROVE(vendorId)));
         } catch (error) {
@@ -25,7 +25,7 @@ export const VendorService = {
         }
     },
 
-    async rejectVendor(vendorId: string): Promise<void> {
+    async rejectVendor(vendorId: number): Promise<void> {
         try {
             await api.patch(buildUrl(ENDPOINTS.VENDOR.REJECT(vendorId)));
         } catch (error) {
@@ -52,7 +52,7 @@ export const useVendor = () => {
         });
     };
 
-    const approveVendor = async (vendorId: string) => {
+    const approveVendor = async (vendorId: number) => {
         await withSpinner(async () => {
             try {
                 await VendorService.approveVendor(vendorId);
@@ -66,7 +66,7 @@ export const useVendor = () => {
         });
     };
 
-    const rejectVendor = async (vendorId: string) => {
+    const rejectVendor = async (vendorId: number) => {
         await withSpinner(async () => {
             try {
                 await VendorService.rejectVendor(vendorId);

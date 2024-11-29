@@ -1,7 +1,7 @@
 import { GlobalCategory } from "./Category";
 
 export interface Product {
-    id: string;
+    id: number;
     name: string;
     description: string;
     price: number;
@@ -10,7 +10,6 @@ export interface Product {
         id: string;
         content: string;
         rating: number;
-        // Add other review fields as needed
     }>;
 }
 
@@ -18,6 +17,6 @@ export interface SaveProductData {
     name: string;
     description: string;
     price: number;
-    categoryId: string;
-    userId?: string
+    categoryId: number;
+    userId?: number
 }

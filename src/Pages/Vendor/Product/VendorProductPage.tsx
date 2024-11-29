@@ -18,7 +18,7 @@ const productValidation = Yup.object().shape({
     price: Yup.number()
         .required('Price is required')
         .min(0, 'Price must be greater than or equal to 0'),
-    categoryId: Yup.string().required('Category is required'),
+    categoryId: Yup.number().required('Category is required'),
 });
 
 const ProductPage = () => {
@@ -68,7 +68,7 @@ const ProductPage = () => {
             name: '',
             description: '',
             price: 0,
-            categoryId: ''
+            categoryId: 0
         }
     });
 

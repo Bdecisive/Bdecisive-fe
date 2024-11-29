@@ -1,5 +1,5 @@
 export interface Category {
-    id: string;
+    id: number;
     name: string;
     vendorName: string;
     companyName: string;
@@ -12,6 +12,6 @@ export interface Category {
 export type CreateCategoryData = Omit<Category, 'id' | 'vendorName' | 'companyName' | 'approved' | 'approvedDate' | 'createdAt'>;
 
 export interface GlobalCategory {
-    id: string;
+    id: number;
     name: string;
 }

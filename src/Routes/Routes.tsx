@@ -12,6 +12,7 @@ import CaptegoryPage from '../Pages/CategoryPage/CategoryPage';
 import VendorPage from '../Pages/Admin/Vendor/VendorPage';
 import UpdateProfilePage from "../Pages/UpdateProfilePage/UpdateProfilePage";
 import ProductPage from '../Pages/Vendor/Product/VendorProductPage';
+import ReviewPage from '../Pages/Influencer/Review/ReviewPage';
 
 
 export const router = createBrowserRouter([
@@ -41,6 +42,7 @@ export const router = createBrowserRouter([
           { path: "vendors", element: <VendorPage /> },
           { path: "categories", element: <CaptegoryPage /> },
           { path: "products", element: <ProductPage /> },
+          { path: 'reviews', element: <ReviewPage /> }
 
           // Add other dashboard routes here
         ]

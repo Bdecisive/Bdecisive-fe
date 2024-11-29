@@ -1,8 +1,7 @@
 import axios from "axios";
 import { CommentGet, CommentPost } from "../Models/Comment";
 import { handleError } from "../Helpers/ErrorHandler";
-
-const api = "http://localhost:8080/api/comment/";
+import { api } from "./ApiService";
 
 export const commentPostAPI = async (
   title: string,
@@ -27,4 +26,15 @@ export const commentGetAPI = async (symbol: string) => {
   } catch (error) {
     handleError(error);
   }
+};
+
+export const useComment = () => {
+  const createComment = async (reviewId: number, data: { content: string }) => {
+    const response = await api.post(`/api/reviews/${reviewId}/comments`, data);
+    return response.data;
+  };
+
+  return {
+    createComment
+  };
 };
