@@ -11,6 +11,11 @@ export const ReviewService = {
     return response.data;
   },
 
+  async getPublicReviews(): Promise<Review[]> {
+    const response = await api.get(buildUrl(ENDPOINTS.REVIEW.LIST));
+    return response.data;
+  },
+
   async getReviewsByCategory(categoryId: number): Promise<Review[]> {
     const response = await api.get(buildUrl(ENDPOINTS.REVIEW.CATEGORY_LIST(categoryId)));
     return response.data;
@@ -34,12 +39,28 @@ export const ReviewService = {
   async deleteReview(reviewId: number): Promise<void> {
     const response = await api.delete(buildUrl(ENDPOINTS.REVIEW.DELETE(reviewId)));
     return response.data;
-  }
+  },
+
+  async getReviewById(reviewId: number): Promise<Review> {
+    const response = await api.get(buildUrl(ENDPOINTS.REVIEW.GET_REVIEW(reviewId)));
+    return response.data;
+  },
+
+  async likeReview(reviewId: number): Promise<Review> {
+    const response = await api.post(buildUrl(ENDPOINTS.REVIEW.LIKE(reviewId)));
+    return response.data;
+  },
+
+  async unlikeReview(reviewId: number): Promise<Review> {
+    const response = await api.post(buildUrl(ENDPOINTS.REVIEW.UNLIKE(reviewId)));
+    return response.data;
+  },
 };
 
 export const useReview = () => {
   const withSpinner = useSpinnerAction();
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [review, setReview] = useState<Review | null>(null);
 
   const fetchReviewsByProduct = async (productId: number) => {
     await withSpinner(async () => {
@@ -129,14 +150,51 @@ export const useReview = () => {
   const fetchPublicReviews = async () => {
     await withSpinner(async () => {
       try {
-        // const response = await ReviewService.getPublicReviews();
-        // setReviews(response);
+        const response = await ReviewService.getPublicReviews();
+        setReviews(response);
       } catch (error) {
         toast.error('Failed to fetch reviews');
         throw error;
       }
     });
   };
+
+  const getReviewById = async (reviewId: number): Promise<Review> => {
+    return await withSpinner(async () => {
+      try {
+        const response = await ReviewService.getReviewById(reviewId);
+        setReview(response);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    });
+  };
+
+  const likeReview = async (reviewId: number): Promise<Review> => {
+    return await withSpinner(async () => {
+      try {
+        const response = await ReviewService.likeReview(reviewId);
+        setReview(response);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    });
+  };
+
+  const unlikeReview = async (reviewId: number): Promise<Review> => {
+    return await withSpinner(async () => {
+      try {
+        const response = await ReviewService.unlikeReview(reviewId);
+        setReview(response);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    });
+  };
+
 
   return {
     reviews,
@@ -147,5 +205,8 @@ export const useReview = () => {
     fetchReviewsByCategory,
     fetchReviewsByUser,
     fetchPublicReviews,
+    getReviewById,
+    likeReview,
+    unlikeReview,
   };
 };

@@ -41,4 +41,8 @@ class ApiService {
     }
 }
 
+export const getErrorMessage = (error: any): string => {
+    return error.response?.data?.message || 'An unexpected error occurred';
+};
+
 export const api = ApiService.getInstance().getApi();

@@ -5,9 +5,12 @@ import { useCategory } from '../../Services/CategoryService';
 import StarRating from '../../Components/Rating/StarRating';
 import { Review } from '../../Models/Review';
 import { Search } from 'lucide-react';
-import ReviewDetail from '../ReviewDetail/ReviewDetail';
+import ReviewDetail from '../ReviewDetail/ReviewDetailPage';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
@@ -21,11 +24,11 @@ const HomePage = () => {
 
   // Filter reviews based on search and category
   const filteredReviews = reviews.filter(review => {
-    const matchesSearch = searchTerm === '' || 
+    const matchesSearch = searchTerm === '' ||
       review.product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       review.details.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesCategory = selectedCategory === null || 
+
+    const matchesCategory = selectedCategory === null ||
       review.category.id === selectedCategory;
 
     return matchesSearch && matchesCategory;
@@ -43,7 +46,7 @@ const HomePage = () => {
             <p className="text-lg text-gray-600 mb-8">
               Discover honest reviews from our community and share your own experiences
             </p>
-            
+
             {/* Search Bar */}
             <div className="relative max-w-xl mx-auto">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -70,11 +73,10 @@ const HomePage = () => {
               <div className="space-y-2">
                 <button
                   onClick={() => setSelectedCategory(null)}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-sm ${
-                    selectedCategory === null
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm ${selectedCategory === null
                       ? 'bg-blue-50 text-blue-700 font-medium'
                       : 'text-gray-600 hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   All Categories
                 </button>
@@ -82,11 +84,10 @@ const HomePage = () => {
                   <button
                     key={category.id}
                     onClick={() => setSelectedCategory(category.id)}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-sm ${
-                      selectedCategory === category.id
+                    className={`w-full text-left px-3 py-2 rounded-lg text-sm ${selectedCategory === category.id
                         ? 'bg-blue-50 text-blue-700 font-medium'
                         : 'text-gray-600 hover:bg-gray-50'
-                    }`}
+                      }`}
                   >
                     {category.name}
                   </button>
@@ -101,9 +102,8 @@ const HomePage = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {filteredReviews.map((review) => (
                   <div
-                    key={review.id}
+                    onClick={() => navigate(`/reviews/${review.id}`)}
                     className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group"
-                    onClick={() => setSelectedReview(review)}
                   >
                     <div className="p-6">
                       <div className="flex justify-between items-start mb-4">
@@ -117,9 +117,9 @@ const HomePage = () => {
                         </div>
                         <StarRating value={review.rating} readOnly size={20} />
                       </div>
-                      
+
                       <p className="text-gray-600 line-clamp-3">{review.details}</p>
-                      
+
                       <div className="mt-4 flex items-center justify-between pt-4 border-t">
                         <div className="flex items-center space-x-2">
                           <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
@@ -148,8 +148,8 @@ const HomePage = () => {
                 </div>
                 <h3 className="mt-2 text-sm font-medium text-gray-900">No reviews found</h3>
                 <p className="mt-1 text-sm text-gray-500">
-                  {searchTerm 
-                    ? "No reviews match your search criteria" 
+                  {searchTerm
+                    ? "No reviews match your search criteria"
                     : "Be the first to write a review!"}
                 </p>
               </div>
@@ -159,13 +159,13 @@ const HomePage = () => {
       </div>
 
       {/* Review Detail Modal */}
-      {selectedReview && (
+      {/* {selectedReview && (
         <ReviewDetail
           review={selectedReview}
           isOpen={!!selectedReview}
           onClose={() => setSelectedReview(null)}
         />
-      )}
+      )} */}
     </div>
   );
 };

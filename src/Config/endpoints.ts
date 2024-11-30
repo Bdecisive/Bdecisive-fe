@@ -34,12 +34,16 @@ export const ENDPOINTS = {
         DELETE: (productId: number) => `/products/${productId}/delete`,
     },
     REVIEW: {
+        LIST: '/reviews/',
         CREATE: '/reviews/create',
         PRODUCT_LIST: (productId: number) => `/reviews/product/${productId}`,
         CATEGORY_LIST: (categoryId: number) => `/reviews/category/${categoryId}`,
         USER_LIST: (userId: number) => `/reviews/user/${userId}`,
         UPDATE: (reviewId: number) => `/reviews/${reviewId}/update`,
         DELETE: (reviewId: number) => `/reviews/${reviewId}/delete`,
+        GET_REVIEW: (reviewId: number) => `/reviews/${reviewId}`,
+        LIKE: (reviewId: number) => `/reviews/${reviewId}/like`,
+        UNLIKE: (reviewId: number) => `/reviews/${reviewId}/unlike`,
     }
 } as const;
 

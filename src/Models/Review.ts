@@ -7,9 +7,11 @@ export interface Review {
     category: GlobalCategory;
     rating: number;
     details: string;
-    createdAt: string;
-    comments?: Comment[];
     userName: string;
+    createdAt: string;
+    likedByUser: boolean;
+    likeCount?: number;
+    comments?: Comment[];
 }
 
 export interface CreateReviewData {

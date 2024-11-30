@@ -13,6 +13,7 @@ import VendorPage from '../Pages/Admin/Vendor/VendorPage';
 import UpdateProfilePage from "../Pages/UpdateProfilePage/UpdateProfilePage";
 import ProductPage from '../Pages/Vendor/Product/VendorProductPage';
 import ReviewPage from '../Pages/Influencer/Review/ReviewPage';
+import ReviewDetailPage from '../Pages/ReviewDetail/ReviewDetailPage';
 
 
 export const router = createBrowserRouter([
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
         element: (
           <AccountVerifyPage />
         ),
+      },
+      {
+        path: "reviews/:reviewId",
+        element: <ReviewDetailPage />
       },
       {
         path: "dashboard",
