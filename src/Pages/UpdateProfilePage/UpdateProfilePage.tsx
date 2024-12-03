@@ -52,7 +52,7 @@ const UpdateProfilePage: React.FC = () => {
     };
 
     fetchUserData();
-  }, [fetchUserProfile, setValue]);
+  }, []);
 
   const handleUpdate: SubmitHandler<RegisterFormsInputs> = async (formData) => {
     try {
