@@ -5,9 +5,9 @@ export interface Review {
     id: number;
     product: Product;
     category: GlobalCategory;
+    name: string;
     rating: number;
     details: string;
-    userName: string;
     createdAt: string;
     likedByUser: boolean;
     likeCount?: number;

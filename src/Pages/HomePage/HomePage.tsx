@@ -123,9 +123,9 @@ const HomePage = () => {
                       <div className="mt-4 flex items-center justify-between pt-4 border-t">
                         <div className="flex items-center space-x-2">
                           <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                            {review.userName?.charAt(0).toUpperCase() || 'U'}
+                            {review.name?.charAt(0).toUpperCase() || 'U'}
                           </div>
-                          <span className="text-sm text-gray-600">{review.userName || 'Anonymous'}</span>
+                          <span className="text-sm text-gray-600">{review.name || 'Anonymous'}</span>
                         </div>
                         <div className="flex items-center space-x-4 text-sm text-gray-500">
                           <span>{new Date(review.createdAt).toLocaleDateString()}</span>
@@ -157,15 +157,6 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-
-      {/* Review Detail Modal */}
-      {/* {selectedReview && (
-        <ReviewDetail
-          review={selectedReview}
-          isOpen={!!selectedReview}
-          onClose={() => setSelectedReview(null)}
-        />
-      )} */}
     </div>
   );
 };

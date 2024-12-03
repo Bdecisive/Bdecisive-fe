@@ -134,9 +134,9 @@ const ReviewDetailPage = () => {
             <div className="mt-4 flex items-center text-sm text-gray-500">
               <div className="flex items-center">
                 <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                  {review.userName?.charAt(0).toUpperCase() || 'U'}
+                  {review.name?.charAt(0).toUpperCase() || 'U'}
                 </div>
-                <span className="ml-2">{review.userName || 'Anonymous'}</span>
+                <span className="ml-2">{review.name || 'Anonymous'}</span>
               </div>
               <span className="mx-2">•</span>
               <span>{new Date(review.createdAt).toLocaleDateString()}</span>

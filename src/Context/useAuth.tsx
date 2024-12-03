@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import React from "react";
 import axios from "axios";
 import { useSpinnerAction } from "../Utils/useSpinnerAction";
-import { useSpinner } from "./SpinnerContext";
 import { UserRole } from "../Models/enums";
 
 type UserContextType = {
@@ -71,7 +70,11 @@ export const UserProvider = ({ children }: Props) => {
           setUser(userObj);
 
           toast.success("Login Success!");
-          navigate("/dashboard");
+          if (isFollower()) {
+            navigate('/home')
+          } else {
+            navigate("/dashboard");
+          }
         }
       } catch (error: any) {
         const errorMessage = error?.response?.data?.message || "Server error occurred";
