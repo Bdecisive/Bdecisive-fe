@@ -3,7 +3,7 @@ import axios from "axios";
 export const useProfileService = () => {
   const getUserProfile = async () => {
     try {
-      const response = await axios.get("/api/user/profile");
+      const response = await axios.get("/api/users/profile");
       return response.data;
     } catch (error) {
       console.error("Failed to fetch user profile:", error);
@@ -21,7 +21,7 @@ export const useProfileService = () => {
     description?: string;
   }) => {
     try {
-      const response = await axios.put("/api/user/update", profileData, {
+      const response = await axios.put("/api/users/profile/update", profileData, {
         headers: { "Content-Type": "application/json" },
       });
       return response.data;

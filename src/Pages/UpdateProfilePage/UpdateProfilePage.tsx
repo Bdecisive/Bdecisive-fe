@@ -14,7 +14,7 @@ const validation = Yup.object().shape({
   lastName: Yup.string().required("Last name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
   username: Yup.string().required("Username is required"),
-  password: Yup.string().required(), // need to revise: Password is optional for update
+  password: Yup.string().required(),
   phone: Yup.string().optional(),
   address: Yup.string().optional(),
   description: Yup.string().optional(),
