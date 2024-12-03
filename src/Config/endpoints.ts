@@ -46,8 +46,8 @@ export const ENDPOINTS = {
         UNLIKE: (reviewId: number) => `/reviews/${reviewId}/unlike`,
     },
     PROFILE: {
-        GET: "/api/users/profile",
-        UPDATE: "/api/users/profile/update",
+        GET: "/users/profile",
+        UPDATE: "/users/profile/update",
     }
 } as const;
 
