@@ -23,7 +23,7 @@ const validation = Yup.object().shape({
 });
 
 const UpdateProfilePage: React.FC = () => {
-  const { getUserProfile, updateUserProfile } = useProfileService();
+  const { fetchUserProfile, updateUserProfile } = useProfileService();
   const { isLoading } = useSpinner();
 
   const {
@@ -42,17 +42,17 @@ const UpdateProfilePage: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const profileData: RegistrationData = await getUserProfile();
+        const profileData: RegistrationData = await fetchUserProfile();
         Object.entries(profileData).forEach(([key, value]) => {
           setValue(key as keyof RegistrationData, value as string);
         });
       } catch (error) {
-        console.error((error as Error).message);
+        console.error("Failed to fetch profile data:", error);
       }
     };
 
     fetchUserData();
-  }, [getUserProfile, setValue]);
+  }, [fetchUserProfile, setValue]);
 
   const handleUpdate: SubmitHandler<RegisterFormsInputs> = async (formData) => {
     try {
