@@ -132,7 +132,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setExpand }) => {
         <div className="text-slate-500">
           <div className="my-8 flex flex-col items-center h-44 overflow-x-hidden">
             <a
-              href={link}
+              href="/update-profile"
               className="text-center flex flex-col items-center justify-center"
             >
               <div
