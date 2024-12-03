@@ -51,17 +51,16 @@ export const useProfileService = () => {
     });
   };
 
-  const updateUserProfile = async (profileData: RegistrationData) => {
-    return await withSpinner(async () => {
-      try {
-        await updateUserProfileAPI(profileData);
-        toast.success("Profile updated successfully!");
-      } catch (error) {
-        toast.error("Failed to update profile.");
-        throw error;
-      }
-    });
+  const updateUserProfile = async (formData: UserProfileData) => {
+    console.log("Sending update request with data:", formData);
+    try {
+      const response = await axios.put("/api/users/profile/update", formData);
+      console.log("Server response:", response.data);
+    } catch (error) {
+      console.error("Error during profile update:", error);
+    }
   };
+
 
   return { fetchUserProfile, updateUserProfile };
 };

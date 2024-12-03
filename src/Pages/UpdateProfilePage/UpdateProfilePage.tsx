@@ -6,6 +6,7 @@ import { useSpinner } from "../../Context/SpinnerContext";
 import { useProfileService } from "../../Services/ProfileService";
 import { RegistrationData } from "../../Models/Registration";
 import { UserRole } from "../../Models/enums";
+import { useNavigate } from "react-router-dom";
 
 type RegisterFormsInputs = RegistrationData & { password?: string };
 
@@ -25,6 +26,7 @@ const validation = Yup.object().shape({
 const UpdateProfilePage: React.FC = () => {
   const { fetchUserProfile, updateUserProfile } = useProfileService();
   const { isLoading } = useSpinner();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -36,6 +38,8 @@ const UpdateProfilePage: React.FC = () => {
     resolver: yupResolver(validation),
     mode: "onChange",
   });
+
+  console.log("Errors: ", errors);
 
   const selectedRole = watch("role");
 
@@ -55,9 +59,11 @@ const UpdateProfilePage: React.FC = () => {
   }, []);
 
   const handleUpdate: SubmitHandler<RegisterFormsInputs> = async (formData) => {
+      console.log("Form Submitted2: ", formData);
     try {
       await updateUserProfile(formData);
       alert("Profile updated successfully");
+      navigate("/dashboard");
     } catch (error) {
       console.error((error as Error).message);
     }
@@ -72,8 +78,16 @@ const UpdateProfilePage: React.FC = () => {
               Update Your Profile
             </h1>
             <form
+              onSubmit={(e) => {
+                console.log("Form submitted1");
+                handleSubmit((formData) => {
+                      console.log("Form submitted2: ", formData);
+                      handleUpdate(formData);
+                    })(e);
+                console.log("Form submitted3");
+              }}
               className="space-y-4 md:space-y-6"
-              onSubmit={handleSubmit(handleUpdate)}
+              //onSubmit={handleSubmit(handleUpdate)}
             >
               <div>
                 <label
@@ -155,6 +169,27 @@ const UpdateProfilePage: React.FC = () => {
                 {errors.username && (
                   <p className="text-red-500 text-sm mt-2">
                     {errors.username.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Password
+                </label>
+                <input
+                  type="text"
+                  id="password"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="password"
+                  {...register("password")}
+                />
+                {errors.phone && (
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.phone.message}
                   </p>
                 )}
               </div>
@@ -264,12 +299,9 @@ const UpdateProfilePage: React.FC = () => {
 
               <button
                 type="submit"
-                disabled={isLoading}
-                className={`w-full text-white bg-lightGreen hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 ${
-                  isLoading ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`w-full text-white bg-lightGreen hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800`}
               >
-                {isLoading ? "Updating..." : "Update Profile"}
+                Update Profile
               </button>
             </form>
           </div>
