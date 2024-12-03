@@ -44,6 +44,10 @@ export const ENDPOINTS = {
         GET_REVIEW: (reviewId: number) => `/reviews/${reviewId}`,
         LIKE: (reviewId: number) => `/reviews/${reviewId}/like`,
         UNLIKE: (reviewId: number) => `/reviews/${reviewId}/unlike`,
+    },
+    PROFILE: {
+        GET: "/api/users/profile",
+        UPDATE: "/api/users/profile/update",
     }
 } as const;
 
