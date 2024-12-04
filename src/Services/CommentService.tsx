@@ -1,38 +1,37 @@
 import axios from "axios";
-import { CommentGet, CommentPost } from "../Models/Comment";
 import { handleError } from "../Helpers/ErrorHandler";
 import { api } from "./ApiService";
+import { buildUrl, ENDPOINTS } from "../Config/endpoints";
+import { useSpinnerAction } from "../Utils/useSpinnerAction";
+import { toast } from "react-toastify";
+import { CommentFormData } from "../Models/Comment";
 
-export const commentPostAPI = async (
-  title: string,
-  content: string,
-  symbol: string
-) => {
-  try {
-    const data = await axios.post<CommentPost>(api + `${symbol}`, {
-      title: title,
-      content: content,
-    });
-    return data;
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const commentGetAPI = async (symbol: string) => {
-  try {
-    const data = await axios.get<CommentGet[]>(api + `?Symbol=${symbol}`);
-    return data;
-  } catch (error) {
-    handleError(error);
-  }
-};
+export const CommentService = {
+  async createComment(reviewId: number, data: CommentFormData): Promise<Comment> {
+    try {
+        const response = await api.post(buildUrl(ENDPOINTS.COMMENT.CREATE(reviewId)), data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+},
+}
 
 export const useComment = () => {
-  const createComment = async (reviewId: number, data: { content: string }) => {
-    const response = await api.post(`/api/reviews/${reviewId}/comments`, data);
-    return response.data;
-  };
+  const withSpinner = useSpinnerAction();
+
+  const createComment = async (reviewId: number, data: CommentFormData) => {
+    await withSpinner(async () => {
+        try {
+            await CommentService.createComment(reviewId, data);
+            toast.success('Comment created successfully');
+        } catch (error) {
+            toast.error('Failed to create comment');
+            console.error('Error creating comment:', error);
+            throw error;
+        }
+    });
+};
 
   return {
     createComment

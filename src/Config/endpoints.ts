@@ -48,6 +48,9 @@ export const ENDPOINTS = {
     PROFILE: {
         GET: "/users/profile",
         UPDATE: "/users/profile/update",
+    },
+    COMMENT: {
+        CREATE: (reviewId: number) => `/comments/review/${reviewId}`
     }
 } as const;
 

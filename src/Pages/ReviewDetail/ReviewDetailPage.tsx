@@ -24,7 +24,7 @@ const ReviewDetailPage = () => {
   useEffect(() => {
     const fetchReview = async () => {
       if (!reviewId) return;
-  
+
       try {
         setIsLoading(true);
         setError(null);
@@ -40,7 +40,7 @@ const ReviewDetailPage = () => {
         setIsLoading(false);
       }
     };
-  
+
     fetchReview();
   }, [reviewId]);
 
@@ -73,6 +73,11 @@ const ReviewDetailPage = () => {
       </div>
     );
   }
+
+  const handleCommentPosted = async (reviewId: number) => {
+    const data = await getReviewById(Number(reviewId));
+    setReview(data);
+  };
 
   if (error || !review || !review.product || !review.category) {
     return (
@@ -189,7 +194,10 @@ const ReviewDetailPage = () => {
               {/* Comment Form */}
               {user ? (
                 <div className="mt-6">
-                  <CommentForm reviewId={review.id} />
+                  <CommentForm
+                    reviewId={review.id}
+                    onCommentPosted={handleCommentPosted}
+                  />
                 </div>
               ) : (
                 <div className="mt-6 text-center py-4 bg-gray-50 rounded-lg">

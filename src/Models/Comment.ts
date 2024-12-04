@@ -1,10 +1,10 @@
-export type CommentPost = {
-  title: string;
+export interface CommentFormData {
   content: string;
-};
+}
 
-export type CommentGet = {
+export type Comment = {
   title: string;
   content: string;
-  createdBy: string;
+  userName: string;
+  createdAt: string;
 };

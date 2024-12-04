@@ -10,7 +10,7 @@ const Navbar = (props: Props) => {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
 
-  const { isLoggedIn, logout, sideMenuIsExpand } = useAuth();
+  const { isLoggedIn, logout, sideMenuIsExpand, isFollower } = useAuth();
 
   return (
     <>
@@ -30,7 +30,7 @@ const Navbar = (props: Props) => {
               </Link>
             </div>
             <div className="hidden font-bold lg:flex">
-            {isLoggedIn() && !isDashboard && (
+            {isLoggedIn() && !isDashboard && !isFollower() && (
                 <Link to="/dashboard" className="text-black hover:text-darkBlue">
                   Dashboard
                 </Link>

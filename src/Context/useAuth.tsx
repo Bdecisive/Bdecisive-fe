@@ -70,8 +70,9 @@ export const UserProvider = ({ children }: Props) => {
           setUser(userObj);
 
           toast.success("Login Success!");
-          if (isFollower()) {
-            navigate('/home')
+
+          if (userObj.role === UserRole.FOLLOWER) {
+            navigate('/')
           } else {
             navigate("/dashboard");
           }
